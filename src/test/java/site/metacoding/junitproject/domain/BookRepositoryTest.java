@@ -1,5 +1,7 @@
 package site.metacoding.junitproject.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,12 +16,15 @@ public class BookRepositoryTest {
     @Test
     public void save_test() throws Exception {
         // given
-        System.out.println("책등록_test 실행");
+        String title = "Football";
+        String author = "Cristiano";
 
+        Book book = Book.builder().title(title).author(author).build();
         // when
-
+        Book bookPS = bookRepository.save(book);
         // then
-
+        assertThat(bookPS.getTitle()).isEqualTo(title);
+        assertThat(bookPS.getAuthor()).isEqualTo(author);
     }
     // 2. 책 목록보기
 
