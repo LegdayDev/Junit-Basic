@@ -1,13 +1,16 @@
 package site.metacoding.junitproject.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest // DB 와 관련된 컴포넌트만 메모리에 로딩(단위 테스트)
 public class BookRepositoryTest {
@@ -54,6 +57,7 @@ public class BookRepositoryTest {
     }
 
     // 3. 책 한건보기
+    @Sql("classpath:db/tableInit.sql")
     @Test
     public void 책한건보기_test() throws Exception {
         // given
@@ -67,7 +71,27 @@ public class BookRepositoryTest {
         assertThat(findBook.getAuthor()).isEqualTo(author);
         assertThat(findBook.getTitle()).isEqualTo(title);
     }
-    // 4. 책 수정
 
-    // 5. 책 삭제
+    // 4. 책 삭제
+    @Sql("classpath:db/tableInit.sql")
+    @Test
+    public void 책삭제_test() throws Exception {
+        // given
+        Long id = 1L;
+
+        // when
+        bookRepository.deleteById(id);
+
+        // then
+        /*
+         * List<Book> books = bookRepository.findAll();
+         * assertThat(books.size()).isEqualTo(0);
+         */
+
+        Optional<Book> bookPS = bookRepository.findById(id);
+
+        assertFalse(bookPS.isPresent());
+    }
+
+    // 5. 책 수정
 }
