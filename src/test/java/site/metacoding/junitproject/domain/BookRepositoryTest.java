@@ -57,7 +57,6 @@ public class BookRepositoryTest {
     }
 
     // 3. 책 한건보기
-    @Sql("classpath:db/tableInit.sql")
     @Test
     public void 책한건보기_test() throws Exception {
         // given
@@ -94,4 +93,22 @@ public class BookRepositoryTest {
     }
 
     // 5. 책 수정
+    @Test
+    @Sql("classpath:db/tableInit.sql")
+    public void 책수정_test() throws Exception {
+        // given
+        Long id = 1L;
+        String title = "Football King";
+        String author = "Ronaldo";
+        Book book = new Book(id, title, author);
+
+        // when
+        Book bookPS = bookRepository.save(book);
+
+        // then
+        assertThat(id).isEqualTo(bookPS.getId());
+        assertThat(title).isEqualTo(bookPS.getTitle());
+        assertThat(author).isEqualTo(bookPS.getAuthor());
+
+    }
 }
