@@ -1,9 +1,9 @@
 package site.metacoding.junitproject.web.dto;
 
-import lombok.Setter;
+import lombok.Data;
 import site.metacoding.junitproject.domain.Book;
 
-@Setter
+@Data
 public class BookSaveReqDto {
     private String title;
     private String author;
