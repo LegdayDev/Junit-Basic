@@ -38,7 +38,7 @@ public class BookService {
     // 2. 책 목록보기
     public List<BookRespDto> 책목록보기() {
         return bookRepository.findAll().stream()
-                .map(new BookRespDto()::toDto)
+                .map((b -> new BookRespDto().toDto(b)))
                 .collect(Collectors.toList());
     }
 
