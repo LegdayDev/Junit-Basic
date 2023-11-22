@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,5 +73,22 @@ public class BookServiceTest {
         assertThat(bookRespDtoList.get(0).getAuthor()).isEqualTo(books.get(0).getAuthor());
         assertThat(bookRespDtoList.get(1).getTitle()).isEqualTo(books.get(1).getTitle());
         assertThat(bookRespDtoList.get(1).getAuthor()).isEqualTo(books.get(1).getAuthor());
+    }
+
+    @Test
+    public void 책한건보기_test() throws Exception {
+        // given
+        Long id = 1L;
+        Book book = new Book(1L, "Junit", "MetaCoding");
+
+        // stub
+        when(bookRepository.findById(id)).thenReturn(Optional.of(book));
+
+        // when
+        BookRespDto dto = bookService.책한건보기(id);
+
+        // then
+        assertThat(dto.getTitle()).isEqualTo(book.getTitle());
+        assertThat(dto.getAuthor()).isEqualTo(book.getAuthor());
     }
 }
