@@ -32,6 +32,13 @@ public class BookService {
                 throw new RuntimeException("메일이 전송되지 않았습니다");
             }
         }
+        /**
+         * save() 후 엔티티가 null 일 경우 예외를 던진다 !
+         */
+        if (bookPS == null) {
+            throw new RuntimeException("빈 객체가 저장되었습니다.");
+        }
+
         return bookPS.toDto();
     }
 
