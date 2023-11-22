@@ -79,9 +79,9 @@ public class BookServiceTest {
     public void 책한건보기_test() throws Exception {
         // given
         Long id = 1L;
-        Book book = new Book(1L, "Junit", "MetaCoding");
 
         // stub
+        Book book = new Book(1L, "Junit", "MetaCoding");
         when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 
         // when
@@ -90,5 +90,26 @@ public class BookServiceTest {
         // then
         assertThat(dto.getTitle()).isEqualTo(book.getTitle());
         assertThat(dto.getAuthor()).isEqualTo(book.getAuthor());
+    }
+
+    @Test
+    public void 책수정하기_test() throws Exception {
+        // given
+        Long id = 1L;
+        BookSaveReqDto dto = new BookSaveReqDto();
+        dto.setTitle("Spring");
+        dto.setAuthor("DearProgramming");
+
+        // stub
+        Book book = new Book(1L, "Junit", "MetaCoding");
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+
+        // when
+        BookRespDto resultDto = bookService.책수정하기(id, dto);
+
+        // then
+        assertThat(resultDto.getId()).isEqualTo(id);
+        assertThat(resultDto.getTitle()).isEqualTo(dto.getTitle());
+        assertThat(resultDto.getAuthor()).isEqualTo(dto.getAuthor());
     }
 }
