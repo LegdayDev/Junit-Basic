@@ -34,7 +34,7 @@ public class BookApiController {
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<>(CMRespDto.builder().code(-1).msg(errorMap.toString()).body(null).build(), HttpStatus.BAD_REQUEST);
+            throw new RuntimeException(errorMap.toString());
         }
         BookRespDto result = bookService.책등록하기(dto);
         return new ResponseEntity<>(CMRespDto.builder().code(1).msg("글 저장 성공!").body(result).build(), HttpStatus.CREATED);
