@@ -18,6 +18,7 @@ import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
 import site.metacoding.junitproject.util.MailSender;
 import site.metacoding.junitproject.web.dto.request.BookSaveReqDto;
+import site.metacoding.junitproject.web.dto.response.BookListRespDto;
 import site.metacoding.junitproject.web.dto.response.BookRespDto;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,14 +66,14 @@ public class BookServiceTest {
         when(bookRepository.findAll()).thenReturn(books);
 
         // when
-        List<BookRespDto> bookRespDtoList = bookService.책목록보기();
+        BookListRespDto bookListRespDto = bookService.책목록보기();
 
         // then
-        assertThat(bookRespDtoList.size()).isEqualTo(2);
-        assertThat(bookRespDtoList.get(0).getTitle()).isEqualTo(books.get(0).getTitle());
-        assertThat(bookRespDtoList.get(0).getAuthor()).isEqualTo(books.get(0).getAuthor());
-        assertThat(bookRespDtoList.get(1).getTitle()).isEqualTo(books.get(1).getTitle());
-        assertThat(bookRespDtoList.get(1).getAuthor()).isEqualTo(books.get(1).getAuthor());
+        assertThat(bookListRespDto.getData().size()).isEqualTo(2);
+        assertThat(bookListRespDto.getData().get(0).getTitle()).isEqualTo(books.get(0).getTitle());
+        assertThat(bookListRespDto.getData().get(0).getAuthor()).isEqualTo(books.get(0).getAuthor());
+        assertThat(bookListRespDto.getData().get(1).getTitle()).isEqualTo(books.get(1).getTitle());
+        assertThat(bookListRespDto.getData().get(1).getAuthor()).isEqualTo(books.get(1).getAuthor());
     }
 
     @Test
