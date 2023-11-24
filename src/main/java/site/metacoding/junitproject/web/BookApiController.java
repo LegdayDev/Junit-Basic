@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +23,14 @@ import site.metacoding.junitproject.web.dto.response.BookRespDto;
 import site.metacoding.junitproject.web.dto.response.CMRespDto;
 
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 @RestController
 public class BookApiController {
 
     private final BookService bookService;
 
     // 1. 책 등록
-    @PostMapping("/api/v1/book")
+    @PostMapping("/book")
     public ResponseEntity<?> saveBook(@RequestBody @Valid BookSaveReqDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -46,11 +44,19 @@ public class BookApiController {
     }
 
     // 2. 책 목록보기
-    @GetMapping("/api/v1/book")
+    @GetMapping("/book")
     public ResponseEntity<?> getBookList(){
         BookListRespDto dto = bookService.책목록보기();
 
         return new ResponseEntity<>(CMRespDto.builder().code(1).msg("글 목록보기 성공").body(dto).build(),
+                HttpStatus.OK);
+    }
+
+    // 3. 책 한건보기
+    @GetMapping("/book/{id}")
+    public ResponseEntity<?> getBook(@PathVariable Long id){
+        BookRespDto dto = bookService.책한건보기(id);
+        return new ResponseEntity<>(CMRespDto.builder().code(1).msg("책 한건보기 성공").body(dto).build(),
                 HttpStatus.OK);
     }
 
