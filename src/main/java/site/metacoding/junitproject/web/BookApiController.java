@@ -60,4 +60,13 @@ public class BookApiController {
                 HttpStatus.OK);
     }
 
+    // 4. 책 삭제하기
+    @DeleteMapping("/book/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable Long id){
+        bookService.책삭제하기(id);
+
+        return new ResponseEntity<>(CMRespDto.builder().code(1).msg("책 삭제하기 성공").body(null).build(),
+                HttpStatus.OK);
+    }
+
 }
