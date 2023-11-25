@@ -36,6 +36,7 @@ public class BookApiControllerTest {
 
     private static ObjectMapper om;
     private static HttpHeaders headers;
+
     @BeforeAll
     public static void init(){
         om = new ObjectMapper();
@@ -89,7 +90,6 @@ public class BookApiControllerTest {
         assertThat(code).isEqualTo(1);
         assertThat(title).isEqualTo("This is Football");
         assertThat(author).isEqualTo("Cristiano Ronaldo");
-
     }
 
     @Sql("classpath:db/tableInit.sql")
@@ -102,8 +102,6 @@ public class BookApiControllerTest {
         HttpEntity<String> request = new HttpEntity<>(null, headers); //GET 은 HTTP Body가 없다.
         ResponseEntity<String> response = rt.exchange("/api/v1/book/"+ id, HttpMethod.GET, request, String.class);
 
-        System.out.println(response.getBody());
-
         //then
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         Integer code = documentContext.read("$.code");
@@ -115,6 +113,23 @@ public class BookApiControllerTest {
         assertThat(bodyId).isEqualTo(1);
         assertThat(title).isEqualTo("This is Football");
         assertThat(author).isEqualTo("Cristiano Ronaldo");
+    }
 
+    @Sql("classpath:db/tableInit.sql")
+    @Test
+    public void deleteBook() throws Exception {
+        //given
+        Long id = 1L;
+
+        //when
+        HttpEntity<String> request = new HttpEntity<>(null, headers); //GET 은 HTTP Body가 없다.
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+ id, HttpMethod.DELETE, request, String.class);
+
+        //then
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        Integer code = documentContext.read("$.code");
+
+        assertThat(code).isEqualTo(1);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
