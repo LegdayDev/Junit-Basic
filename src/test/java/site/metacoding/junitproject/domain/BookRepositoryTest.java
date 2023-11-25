@@ -10,8 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+@ActiveProfiles("dev") // dev 모드일 때만 작동
 @DataJpaTest // DB 와 관련된 컴포넌트만 메모리에 로딩(단위 테스트)
 public class BookRepositoryTest {
 

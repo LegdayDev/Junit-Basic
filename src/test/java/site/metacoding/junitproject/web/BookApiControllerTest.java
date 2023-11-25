@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
@@ -24,6 +25,7 @@ import static org.springframework.boot.test.context.SpringBootTest.*;
  * <h2> 통합테스트 </h2>
  * <li> Controller+Service+Repository 를 통합하여 테스트</li>
  */
+@ActiveProfiles("dev") // dev 모드일 때만 작동
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BookApiControllerTest {
 
@@ -131,5 +133,31 @@ public class BookApiControllerTest {
 
         assertThat(code).isEqualTo(1);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void updateBook() throws Exception {
+        //given
+        Long id = 1L;
+        BookSaveReqDto dto = new BookSaveReqDto();
+        dto.setTitle("FootBall King");
+        dto.setAuthor("CR7");
+        String body = om.writeValueAsString(dto);
+
+        //when
+        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+ id, HttpMethod.PUT, request, String.class);
+        System.out.println(response.getBody());
+
+        //then
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        Integer bodyId = documentContext.read("$.body.id");
+        String title = documentContext.read("$.body.title");
+        String author = documentContext.read("$.body.author");
+
+        assertThat(bodyId).isEqualTo(1);
+        assertThat(title).isEqualTo(dto.getTitle());
+        assertThat(author).isEqualTo(dto.getAuthor());
+
     }
 }
