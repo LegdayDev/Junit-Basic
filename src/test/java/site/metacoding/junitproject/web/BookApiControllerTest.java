@@ -136,7 +136,7 @@ public class BookApiControllerTest {
     }
 
     @Test
-    public void updateBook() throws Exception {
+    public void updateBookTest() throws Exception {
         //given
         Long id = 1L;
         BookSaveReqDto dto = new BookSaveReqDto();
@@ -158,6 +158,5 @@ public class BookApiControllerTest {
         assertThat(bodyId).isEqualTo(1);
         assertThat(title).isEqualTo(dto.getTitle());
         assertThat(author).isEqualTo(dto.getAuthor());
-
     }
 }
