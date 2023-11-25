@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.jdbc.Sql;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
 import site.metacoding.junitproject.service.BookService;
@@ -86,6 +87,32 @@ public class BookApiControllerTest {
         String author = documentContext.read("$.body.data[0].author");
 
         assertThat(code).isEqualTo(1);
+        assertThat(title).isEqualTo("This is Football");
+        assertThat(author).isEqualTo("Cristiano Ronaldo");
+
+    }
+
+    @Sql("classpath:db/tableInit.sql")
+    @Test
+    public void getBookTest() throws Exception {
+        //given
+        Long id = 1L;
+
+        //when
+        HttpEntity<String> request = new HttpEntity<>(null, headers); //GET 은 HTTP Body가 없다.
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+ id, HttpMethod.GET, request, String.class);
+
+        System.out.println(response.getBody());
+
+        //then
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        Integer code = documentContext.read("$.code");
+        Integer bodyId = documentContext.read("$.body.id");
+        String title = documentContext.read("$.body.title");
+        String author = documentContext.read("$.body.author");
+
+        assertThat(code).isEqualTo(1);
+        assertThat(bodyId).isEqualTo(1);
         assertThat(title).isEqualTo("This is Football");
         assertThat(author).isEqualTo("Cristiano Ronaldo");
 
